@@ -1,0 +1,28 @@
+#!/bin/bash
+
+function check_install() {
+	$1 --version > /dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "Por favor, instale o $1 e tente novamente..."
+		echo ""
+		return
+	fi
+}
+
+function check_os() {
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        return "linux"
+	elif [[ "$OSTYPE" == "darwin"* ]]; then
+        return "macosx"
+	elif [[ "$OSTYPE" == "cygwin" ]]; then
+        return "windows"
+	elif [[ "$OSTYPE" == "msys" ]]; then
+		return "windows"
+	elif [[ "$OSTYPE" == "win32" ]]; then
+		return "windows"
+	elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        return "freebsd"
+	else
+        return "nothing"
+	fi
+}
