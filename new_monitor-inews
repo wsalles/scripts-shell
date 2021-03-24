@@ -1,11 +1,15 @@
-#!/bin/bash
-
-
+#!/usr/bin/env bash
+#-----------------------------------------------------------------------------------------------------------------------#
+#
+#   * Website    : coming soon...
+#   * Athor      : Raphael Salomão
+#   * Mainteiner : Raphael Salomão, Wallace Salles
+#   * Date       : 2018/04/27
+#
+#- NOTES ---------------------------------------------------------------------------------------------------------------#
 #REFATORAÇÃO SALOMÃO##
 # VEM CO PAI#
-## Script desenvolvido por Raphael Salomão em 27/04/2018 ##
-
-### Manutenções/melhorias realizadas por Wallace Salles ###
+# ----------------------------------------------------------------------------------------------------------------------#
 
 ARQSAIDA=/site/exc/resultados
 PLACAESPELHAMENTO=eno1

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#-----------------------------------------------------------------------------------------------------------------------#
+#
+#   * Website    : coming soon...
+#   * Athor      : Wallace Salles
+#   * Mainteiner : Wallace Salles
+#
+#- VARIABLES -----------------------------------------------------------------------------------------------------------#
+CODE_CHANGE="\033["
+ENDCOLOR="$CODE_CHANGE;0m"
+
+BLACK="${CODE_CHANGE}30"
+RED="${CODE_CHANGE}31"
+GREEN="${CODE_CHANGE}32"
+YELLOW="${CODE_CHANGE}33"
+BLUE="${CODE_CHANGE}34"
+PURPLE="${CODE_CHANGE}35"
+CYAN="${CODE_CHANGE}36"
+LIGHT="${CODE_CHANGE}37"
+
+#- FUNCTIONS -----------------------------------------------------------------------------------------------------------#
+function set_color() {
+    case $2 in
+    BOLD)
+        COLOR="$1;1m"           ;;
+    BLURRED)
+        COLOR="$1;2m"           ;;
+    UNDERLINE)
+        COLOR="$1;4m"           ;;
+    FLASHING)
+        COLOR="$1;5m"           ;;
+    REVERSE)
+        COLOR="$1;7m"           ;;
+    HIDDEN)
+        COLOR="$1;8m"           ;;
+    *)
+        COLOR="$1;m"            ;;
+    esac
+}
+
+function reset_color() {
+    COLOR="$CODE_CHANGE;0m"
+    echo -e "${COLOR}>Resetting colored text"
+}
+
+#- TESTS ---------------------------------------------------------------------------------------------------------------#
+set_color ${RED} 
+echo -e "${COLOR}What's up?" 
+set_color ${BLUE} BOLD
+echo -e "${COLOR}not bad, right?"
+reset_color
+echo woooooooooow!
+set_color ${GREEN} FLASHING
+echo -e ${COLOR}"and now?!" ${ENDCOLOR}
+echo -e "Restarted again?"
+#- RUN -----------------------------------------------------------------------------------------------------------------#
+
+#-----------------------------------------------------------------------------------------------------------------------#
+
+
+
+

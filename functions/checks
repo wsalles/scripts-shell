@@ -1,12 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function check_install() {
-	$1 --version > /dev/null 2>&1
-	if [ $? -ne 0 ]; then
-		echo "Por favor, instale o $1 e tente novamente..."
-		echo ""
-		return
-	fi
+	[ ! -x "$(which $1)" ] && echo "Please, you need to install: $1"; exit 1
 }
 
 function check_os() {
@@ -24,5 +19,13 @@ function check_os() {
         return "freebsd"
 	else
         return "nothing"
+	fi
+}
+
+check_args() {
+	if [[ ${#@} -eq 0 ]]; then
+		[ ! -z "$USAGE_MSG" ] && echo -e "$USAGE_MSG" \
+							  || echo "You can use the \$USAGE_MSG variable to show more details." \
+							  ;  exit 1
 	fi
 }
