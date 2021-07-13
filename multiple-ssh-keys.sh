@@ -4,14 +4,13 @@
 #   * Website    : https://wallacesalles.dev
 #   * Athor      : Wallace Salles
 #   * Mainteiner : Wallace Salles
-#
+#   * Motivation: When you need to use more than 2 GitHub accounts on the same machine with the ssh-key.
 # VARIABLES -------------------------------------------------------------------------------------------
 declare -A name
 declare -A email
 declare -A key
 
-#name["personal"]="wsalles"
-name["personal"]="Wallace Salles"
+name["personal"]="wsalles"
 email["personal"]="wallace_robinson@hotmail.com"
 key["personal"]="id_rsa_wallace_robinson@hotmail.com"
 
@@ -29,8 +28,8 @@ function task {
   ssh-add ~/.ssh/${key["$type"]}
   ssh-add -l
 
-  git config user.name ${name["$type"]}
-  git config user.email ${email["$type"]}
+  git config --global user.name ${name["$type"]}
+  git config --global user.email ${email["$type"]}
 }
 
 # TESTS AND RUN ---------------------------------------------------------------------------------------
