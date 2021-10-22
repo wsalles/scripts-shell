@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+function log {
+        echo [$(date "+%d/%m/%Y %H:%M:%S")] - $@
+}
+
+function create_lock {
+    basename=$(basename $0)
+    file_lock="/tmp/$basename.lock"
+    pid=$$
+    log Starting Script
+    if [ -f $file_lock ]; then
+    if ps -p $(cat $file_lock) > /dev/null 2>&1; then
+        log Lock file found. Exiting...
+            exit 0
+        else
+            log Lock file found but no process running. Removing lock file: $file_lock
+            rm -f $file_lock
+            log Creating lockfile: $file_lock
+            echo $pid > $file_lock
+        fi
+        else
+        log Creating lock file: $file_lock
+            echo $pid > $file_lock
+        fi
+}
+
+function remove_lock {
+    log Removing lock file: $file_lock
+    rm -f $file_lock 2> /dev/null
+}

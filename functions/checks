@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+function check_install() {
+	[ ! -x "$(which $1)" ] && echo "Please, you need to install: $1" && exit 1
+}
+
+function check_os() {
+	if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        return "linux"
+	elif [[ "$OSTYPE" == "darwin"* ]]; then
+        return "macosx"
+	elif [[ "$OSTYPE" == "cygwin" ]]; then
+        return "windows"
+	elif [[ "$OSTYPE" == "msys" ]]; then
+		return "windows"
+	elif [[ "$OSTYPE" == "win32" ]]; then
+		return "windows"
+	elif [[ "$OSTYPE" == "freebsd"* ]]; then
+        return "freebsd"
+	else
+        return "nothing"
+	fi
+}
+
+check_args() {
+	if [[ ${#@} -eq 0 ]]; then
+		[ ! -z "$USAGE_MSG" ] && echo -e "$USAGE_MSG" \
+							  || echo "You can use the \$USAGE_MSG variable to show more details." \
+							  ;  exit 1
+	fi
+}

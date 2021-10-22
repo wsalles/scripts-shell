@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+#-----------------------------------------------------------------------------------------------------------------------#
+#
+#   * Website    : coming soon...
+#   * Athor      : Raphael Salomão
+#   * Mainteiner : Raphael Salomão, Wallace Salles
+#   * Date       : 2018/04/27
+#
+#- NOTES ---------------------------------------------------------------------------------------------------------------#
+#REFATORAÇÃO SALOMÃO##
+# VEM CO PAI#
+# ----------------------------------------------------------------------------------------------------------------------#
+
+ARQSAIDA=/site/exc/resultados
+PLACAESPELHAMENTO=eno1
+PLACACORP=eno2
+#LINKESPELHAMENTO=$(ethtool $PLACAESPELHAMENTO | grep Link |grep detected | cut -f2 -d":" | tr -d " ")
+#LINKCORP=$(ethtool $PLACACORP | grep Link |grep detected |  cut -f2 -d":" | tr -d " ")
+NUMSESSOES=$(/exc/list c | grep gnews | grep -c G)
+NUMLOGADOS=$(/exc/list s | grep -c G)
+let PERCENTUALUSOLICENCAS=$NUMLOGADOS*100/$NUMSESSOES
+VERSAO=2.0
+IPESPELHAMENTO=$(grep -i `hostname` /etc/hosts | grep -iv `hostname`1 | cut -f1 -d" "| cut -f1 )
+IPCORP=$(grep -i `hostname`1 /etc/hosts | cut -f1 -d" ")
+
+function usage(){
+cat << EOF
+|  \/  |/ _ \| \ | |_ _|_   _/ _ \|  _ \    / \  / ___|  / \  / _ \ 
+| |\/| | | | |  \| || |  | || | | | |_) |  / _ \| |     / _ \| | | |
+| |  | | |_| | |\  || |  | || |_| |  _ <  / ___ \ |___ / ___ \ |_| |
+|_|  |_|\___/|_| \_|___| |_| \___/|_| \_\/_/   \_\____/_/   \_\___/ 
+                                                                    
+ ___ _   _ _______        ______  
+|_ _| \ | | ____\ \      / / ___| 
+ | ||  \| |  _|  \ \ /\ / /\___ \ 
+ | || |\  | |___  \ V  V /  ___) |
+|___|_| \_|_____|  \_/\_/  |____/ 
+--------------------------------------------------------------------
+
+Usage: $0 options
+
+OPTIONS:
+-h printa esta mensagem
+-c [logados|sessoes] printa usuarios logados
+-i [espelhamento|corp] printa ip espelhamento ou corp
+-l [espelhamento|corp] printa link espelhamento ou corp
+-p [espelhamento|corp] printa placa espelhamento ou corp
+-s [sistema|servidor|espaco] printa status
+-v printa versao
+-w printa uso de licenca
+EOF
+}
+
+function get_sessao(){
+  # flag -c with argument
+  case $1 in
+    logados)
+      echo NumLogados=$NUMLOGADOS ;;
+    sessoes)
+      echo NumSessoes=$NUMSESSOES ;;
+  esac
+}
+
+function get_ip(){
+  # flag -i with argument
+  case $1 in
+    espelhamento)
+      echo IPESPELHAMENTO=$IPESPELHAMENTO ;;
+    corp)
+      echo IPCORP=$IPCORP ;;
+  esac
+}
+
+function get_link(){
+  # flag -l with argument
+  case $1 in
+    espelhamento)
+      echo LinkEspelhamento=$LINKESPELHAMENTO ;;
+    corp)
+      echo LinkCorp=$LINKCORP ;;
+  esac
+}
+
+function get_placa(){
+  # flag -p with argument
+  case $1 in
+    espelhamento)
+      echo Placaespelhamento=$PLACAESPELHAMENTO ;;
+    corp)
+      echo Placacorp=$PLACACORP ;;
+  esac
+}
+
+function get_status(){
+  # flag -s with argument
+  if /exc/ifis named; then
+    case $1 in
+      sistema)
+        echo StatusSistema=`/exc/status | grep System | cut -f1 -d"."| cut -f3 -d" "` ;;
+      servidor)
+        echo StatusServidor=`/exc/status | grep LINE | cut -f3 -d" "` ;;
+      espaco)
+        echo Espaco=`/exc/dbfree | cut -f2 -d"=" | cut -f1 -d"%" | tr -d " "` ;;
+      *)
+        echo "Not found, try again." ;;
+    esac
+  else
+    echo StatusSistema=NOTNAMED
+  fi
+}
+
+function get_version (){
+  # flag -v
+  echo VersaoScript=$VERSAO
+}
+
+function get_usolicenca(){
+  # flag -w
+  echo PercentualUsoLicencas=$PERCENTUALUSOLICENCAS
+}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 0
+fi
+
+while getopts ":c:i:l:p:s:vw" opt; do
+  case $opt in
+    c)
+      get_sessao $OPTARG ;;
+    :)
+      echo "Esta opção requer um argumento, utilize -h para ajuda" ;;
+    i)
+      get_ip $OPTARG ;;
+    l)
+      get_link $OPTARG ;;
+    p)
+      get_placa $OPTARG ;;
+    s)
+      get_status $OPTARG ;;
+    v)
+      get_version ;;
+    w)
+      get_usolicenca ;;
+    \?)
+      usage ;;
+  esac
+done
