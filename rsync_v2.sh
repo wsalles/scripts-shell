@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #-----------------------------------------------------------------------------------------------------------------------#
 #
-#   * Website    : coming soon...
-#   * Athor      : Wallace Salles
+#   * Website    : https://wallacesalles.dev/
+#   * Author     : Wallace Salles
 #   * Mainteiner : Wallace Salles
 #
 #- VARIABLES -----------------------------------------------------------------------------------------------------------#
