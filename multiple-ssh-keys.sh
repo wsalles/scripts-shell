@@ -2,40 +2,51 @@
 #-----------------------------------------------------------------------------------------------------------------------#
 #
 #   * Website    : https://wallacesalles.dev
-#   * Athor      : Wallace Salles
+#   * Author     : Wallace Salles
 #   * Mainteiner : Wallace Salles
-#   * Motivation: When you need to use more than 2 GitHub accounts on the same machine with the ssh-key.
+#   * Motivation : When you need to use more than 2 GitHub accounts on the same machine with the ssh-key.
+#                  Or when you need to setup more than 2 GPG Keys (two different emails)
+#
 # VARIABLES -------------------------------------------------------------------------------------------
 declare -A name
 declare -A email
 declare -A key
-
-name["personal"]="wsalles"
-email["personal"]="wallace_robinson@hotmail.com"
-key["personal"]="id_rsa_wallace_robinson@hotmail.com"
-
-name["job"]="wallacesalles-hotmart"
-email["job"]="wallace.salles@hotmart.com"
-key["job"]="id_rsa"
+declare -A signingKey
 
 type="$1"
 USAGE_MSG="Usage: source $0 <type> \nType: [personal, job]"
 
+# GIT CONFIG -----------------------------------------------------------------------------------------------------------#
+# PERSONAL INFO
+name["personal"]=${GIT_PERSONAL_ACCOUNT_NAME:-"wsalles"}
+email["personal"]=${GIT_PERSONAL_ACCOUNT_EMAIL:-"wallace_robinson@hotmail.com"}
+key["personal"]=${GIT_PERSONAL_ACCOUNT_KEY:-"id_rsa"}
+signingKey["personal"]=${GIT_PERSONAL_ACCOUNT_SIGNING_KEY}
+# JOB INFO
+name["job"]=${GIT_JOB_ACCOUNT_NAME}
+email["job"]=${GIT_JOB_ACCOUNT_EMAIL}
+key["job"]=${GIT_JOB_ACCOUNT_KEY}
+signingKey["job"]=${GIT_JOB_ACCOUNT_SIGNING_KEY}
+
 # METHODS ---------------------------------------------------------------------------------------------
 function task {
-  echo -e "Let's the use:\n- ${name["$type"]}\n- ${email["$type"]}\n- ${key["$type"]}\n"
   ssh-add -D
   ssh-add ~/.ssh/${key["$type"]}
   ssh-add -l
 
   git config --global user.name ${name["$type"]}
   git config --global user.email ${email["$type"]}
+  
+  [ ! -z ${signingKey["$type"]} ] \
+    && git config --global user.signingkey ${signingKey["$type"]} \
+    || git config --global --unset user.signingkey
 }
 
 # TESTS AND RUN ---------------------------------------------------------------------------------------
 if [[ "${type}" == "job"  ]] || [[ "${type}" == "personal" ]]; then
-  echo "Passed!"
   task
+  echo -e "\n+ New Git config:"
+  git config --global --list | tail -n100
 else
   echo -e ${USAGE_MSG};
 fi
