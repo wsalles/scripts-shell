@@ -36,6 +36,7 @@ function task {
 
   git config --global user.name ${name["$type"]}
   git config --global user.email ${email["$type"]}
+  git config --global commit.gpgsign true
   
   [ ! -z ${signingKey["$type"]} ] \
     && git config --global user.signingkey ${signingKey["$type"]} \
